@@ -1,0 +1,20 @@
+[
+  {
+    "task_id": "classification_basic",
+    "difficulty": "Easy",
+    "description": "Correctly categorize study and hackathon content.",
+    "target_reward": 10
+  },
+  {
+    "task_id": "security_and_time",
+    "difficulty": "Medium",
+    "description": "Detect harmful URLs and group content by the correct month.",
+    "target_reward": 25
+  },
+  {
+    "task_id": "full_ai_assistant",
+    "difficulty": "Hard",
+    "description": "Perform classification, safety checks, and generate smart reminders based on usage.",
+    "target_reward": 45
+  }
+]

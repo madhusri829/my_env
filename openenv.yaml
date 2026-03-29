@@ -1,0 +1,10 @@
+name: AI-Browser-Organizer
+version: 1.0.0
+author: "Hackathon_Innovator"
+description: "AI-driven browser history organizer with safety and usage tracking."
+entry_point: "env:BrowserOrganizerEnv"
+env_file: "env.py"
+task_file: "tasks.json"
+dependencies:
+  - gym
+  - numpy
