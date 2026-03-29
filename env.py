@@ -1,87 +1,39 @@
-
 import gymnasium as gym
 from gymnasium import spaces
 import numpy as np
 from datetime import datetime
 
 class BrowserOrganizerEnv(gym.Env):
-    def __init__(self):
+    def __init__(self, render_mode=None):
         super(BrowserOrganizerEnv, self).__init__()
-
-        # Actions: 0-4: Categories, 5: Remove, 6: Safe, 7: Harmful, 8: Group, 9: Month, 10: Usage, 11: Reminder
         self.action_space = spaces.Discrete(12)
         
-        # FIXED: Added missing URLs and closed the quotes
         self.data = [
-            {"title": "Advanced Python Patterns", "url": "https://docs.python.org", "date": "2026-03-01", "usage_count": {"study": 20, "movies": 0}},
-            {"title": "Get Rich Quick! Click Here", "url": "http://malicious-site.biz/scam", "date": "2026-03-05", "usage_count": {"others": 1}},
-            {"title": "Hackathon Final Submission", "url": "https://devpost.com/hack", "date": "2026-02-15", "usage_count": {"hackathon": 50}},
-            {"title": "Avengers: Secret Wars Trailer", "url": "https://youtube.com/marvel", "date": "2026-01-10", "usage_count": {"movies": 15}},
-            {"title": "Duplicate Movie Link", "url": "https://youtube.com/duplicate", "date": "2026-01-11", "usage_count": {"movies": 1}}
+            {"title": "Python Tutorial", "url": "https://docs.python.org", "date": "2026-03-01", "usage_count": {"study": 20, "movies": 0}},
+            {"title": "Win Free Money", "url": "http://scam-site.biz/scam", "date": "2026-03-05", "usage_count": {"others": 1}},
+            {"title": "Hackathon Submission", "url": "https://devpost.com/hack", "date": "2026-02-15", "usage_count": {"hackathon": 50}},
+            {"title": "Action Movies", "url": "https://youtube.com/movies", "date": "2026-01-10", "usage_count": {"movies": 15}}
         ]
-        
         self.current_index = 0
-        self.state = self.data[self.current_index]
 
     def reset(self, seed=None, options=None):
-        # REQUIRED: Initialize the random seed
         super().reset(seed=seed)
-        
         self.current_index = 0
-        self.state = self.data[self.current_index]
-        
-        # FIXED: Return state AND an empty info dictionary (2 items)
-        return self.state, {}
-
-    def _calculate_reward(self, action):
-        item = self.state
-        reward = 0
-        
-        # 0-4: Classification logic
-        if action == 0 and "python" in item['title'].lower(): reward += 5
-        elif action == 1 and "hackathon" in item['title'].lower(): reward += 5
-        elif action == 3 and "avengers" in item['title'].lower(): reward += 5
-        
-        # 7: Harmful Detection
-        elif action == 7:
-            if "http://" in item['url'] or "scam" in item['url']: reward += 10
-            else: reward -= 10 
-
-        # 9: Month Assignment
-        elif action == 9:
-            try:
-                month = datetime.strptime(item['date'], "%Y-%m-%d").strftime("%B")
-                if (month == "March" and "03" in item['date']) or (month == "February" and "02" in item['date']):
-                    reward += 5
-            except:
-                reward -= 2
-
-        # 11: Reminder Logic
-        elif action == 11:
-            most_used = max(item['usage_count'], key=item['usage_count'].get)
-            if most_used in ["study", "hackathon"]: reward += 6
-            else: reward -= 5
-
-        # General "Wrong Action" penalty
-        else:
-            reward -= 2
-            
-        return reward
+        observation = self.data[self.current_index]
+        return observation, {}
 
     def step(self, action):
-        reward = self._calculate_reward(action)
+        # Basic reward logic
+        item = self.data[self.current_index]
+        reward = 1 if action == 0 else 0 
         
         self.current_index += 1
-        
-        # FIXED: Track terminated (end of data) and truncated (time limit)
         terminated = self.current_index >= len(self.data)
-        truncated = False 
+        truncated = False
         
         if not terminated:
-            self.state = self.data[self.current_index]
+            observation = self.data[self.current_index]
         else:
-            # Stay on the last item if done
-            self.state = self.data[self.current_index - 1]
+            observation = self.data[self.current_index - 1]
 
-        # FIXED: MUST return 5 values for Gymnasium compatibility
-        return self.state, reward, terminated, truncated, {}
+        return observation, reward, terminated, truncated, {}
