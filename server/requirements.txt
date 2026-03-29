@@ -2,3 +2,4 @@ gymnasium==0.29.1
 numpy
 fastapi
 uvicorn
+python-multipart
