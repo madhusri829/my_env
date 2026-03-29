@@ -3,14 +3,14 @@ from gymnasium import spaces
 
 class BrowserOrganizerEnv(gym.Env):
     def __init__(self, render_mode=None):
-        super(BrowserOrganizerEnv, self).__init__()
+        super().__init__()
         self.action_space = spaces.Discrete(12)
         
-        # Data includes 'is_registered' for contests
+        # FEATURE: User-registered contests for reminders
         self.data = [
-            {"title": "Codeforces Round 900", "url": "https://codeforces.com", "is_registered": True, "category": "hackathon"},
-            {"title": "LeetCode Weekly", "url": "https://leetcode.com", "is_registered": True, "category": "hackathon"},
-            {"title": "Python Basics", "url": "https://docs.python.org", "is_registered": False, "category": "study"}
+            {"title": "Codeforces Round 900", "url": "https://codeforces.com", "registered": True, "category": "hackathon"},
+            {"title": "LeetCode Weekly 400", "url": "https://leetcode.com", "registered": True, "category": "hackathon"},
+            {"title": "Python for Data Science", "url": "https://coursera.org", "registered": False, "category": "study"}
         ]
         self.current_index = 0
 
@@ -23,14 +23,18 @@ class BrowserOrganizerEnv(gym.Env):
         item = self.data[self.current_index]
         reward = 0
         
-        # Logic for Contest Reminders
-        if item.get("is_registered") == True:
-            if action == 11: reward += 20 # High reward for reminder
-            else: reward -= 10
-        elif action == 0 and item["category"] == "study": reward += 5
-        
+        # LOGIC: Reward for contest reminders (Action 11)
+        if item.get("registered"):
+            if action == 11: 
+                reward = 20  # Bonus for reminding scheduled contest
+                print(f">>> REMINDER SENT: {item['title']}")
+            else: 
+                reward = -10 # Penalty for missing it
+        elif action == 0 and item["category"] == "study":
+            reward = 5
+            
         self.current_index += 1
-        done = self.current_index >= len(self.data)
-        obs = self.data[self.current_index if not done else self.current_index-1]
+        terminated = self.current_index >= len(self.data)
         
-        return obs, reward, done, False, {}
+        obs = self.data[self.current_index if not terminated else self.current_index - 1]
+        return obs, reward, terminated, False, {}
