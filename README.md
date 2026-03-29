@@ -1,31 +1,37 @@
-# 🌐 AI-Powered Browser Content Organizer 🚀
-
-**Project Title**: Personalized Browser Content Organizer with AI Assistance  
-**Framework**: OpenEnv / Gymnasium / Docker  
-**Deployment**: [Live on Hugging Face Spaces](https://huggingface.co/spaces/Madhusri-08/my-env)
-
+---
+title: AI-Browser-Organizer
+emoji: 🌍
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
 ---
 
-## 📝 Problem Statement
-Users struggle to manage cluttered browser histories mixed with study, work, and entertainment. Additionally, phishing and unsafe links often go unnoticed. 
+# 🌐 AI-Powered Browser Content Organizer
 
-**Solution**: This AI environment classifies content, detects harmful links, tracks usage, and provides proactive reminders to enhance productivity and safety.
+### 🚀 Submission for OpenEnv Hackathon
+
+**GitHub Repository**: [https://github.com/madhusri829/my_env](https://github.com/madhusri829/my_env)
+
+## 📌 Overview
+This project is an AI-driven browser history organizer built using the **OpenEnv** framework and **Gymnasium**. It helps users manage their digital life by classifying links, detecting security threats, and providing smart productivity reminders.
 
 ## ✨ Key Features
-- **Classification**: Categorizes links into Study, Hackathon, Personal, Movies, and more.
-- **Safety Engine**: Identifies `http://` and suspicious URLs.
-- **Time-Based Organization**: Groups browsing history by month.
-- **Usage Tracking**: Identifies the user's most frequent activities.
-- **Smart Reminders**: Proactively suggests content based on behavior.
+- **Smart Classification**: Automatically sorts links into categories like *Study*, *Hackathon*, *Personal*, and *Movies*.
+- **Security Shield**: Detects potentially harmful `http://` links or phishing domains.
+- **Time-Based Groups**: Organizes browsing history by the month of access.
+- **Usage Tracking**: Identifies "Most Used" categories to understand user behavior.
+- **Proactive Reminders**: Suggests actions like "Continue learning Python today!" based on history.
 
-## 🛠️ Tech Stack
-- **Python**: Core logic.
-- **Gymnasium**: Reinforcement Learning environment structure.
-- **Docker**: For consistent deployment and isolation.
-- **OpenEnv**: Evaluation and hosting framework.
+## 🛠️ Technical Implementation
+- **Environment**: Custom `Gymnasium` environment (`env.py`).
+- **State Space**: Includes Page Title, URL, Date, and Usage Counts.
+- **Action Space**: 12 discrete actions covering classification, security, and reminders.
+- **Deployment**: Containerized using **Docker** and hosted on **Hugging Face Spaces**.
 
 ## 🚀 How to Run Locally
-1. **Clone the repo**:
+If you have Docker installed, you can test this environment locally:
+
+1. **Build the image**:
    ```bash
-   git clone https://github.com/madhusri829/my_env.git
-   cd my_envgit remote add origin
+   docker build -t browser-ai .
