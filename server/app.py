@@ -1,27 +1,27 @@
-import os
 import sys
 from fastapi import FastAPI
 import uvicorn
 
-# This line MUST show up in logs if the server starts
-print(">>> SERVER BOOT SEQUENCE STARTED <<<", flush=True)
+# FORCE LOGS TO APPEAR
+print(">>> SERVER IS STARTING <<<", flush=True)
+sys.stdout.flush()
 
 try:
     from env import BrowserOrganizerEnv
-    print(">>> ENV.PY LOADED SUCCESSFULLY <<<", flush=True)
+    env = BrowserOrganizerEnv()
+    print(">>> ENVIRONMENT LOADED <<<", flush=True)
 except Exception as e:
-    print(f">>> ERROR LOADING ENV.PY: {e} <<<", flush=True)
+    print(f">>> ERROR: {e} <<<", flush=True)
 
 app = FastAPI()
-env = BrowserOrganizerEnv()
 
 @app.get("/")
-async def root():
-    return {"message": "OpenEnv Server Running"}
+async def health():
+    return {"status": "ok"}
 
 @app.post("/reset")
 async def reset():
-    print(">>> GRADER CALLED RESET <<<", flush=True)
+    print(">>> RESET CALLED BY GRADER <<<", flush=True)
     obs, info = env.reset()
     return {"observation": obs, "info": info}
 
@@ -30,12 +30,9 @@ async def step(data: dict):
     action = data.get("action", 0)
     obs, reward, terminated, truncated, info = env.step(action)
     return {
-        "observation": obs,
-        "reward": reward,
-        "terminated": terminated,
-        "truncated": truncated,
+        "observation": obs, 
+        "reward": reward, 
+        "terminated": terminated, 
+        "truncated": truncated, 
         "info": info
     }
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
