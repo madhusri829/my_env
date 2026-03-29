@@ -2,16 +2,20 @@ from env import BrowserOrganizerEnv
 
 def run_agent():
     env = BrowserOrganizerEnv()
-    state = env.reset()
+    
+    # FIXED: Gymnasium reset returns (state, info)
+    state, info = env.reset()
+    
     done = False
     total_score = 0
 
     print("--- Starting AI Browser Organizer Inference ---")
 
     while not done:
+        # Now 'state' is the dictionary, so 'title' will work!
         print(f"\nAnalyzing: {state['title']}")
         
-        # Simulated AI logic (In a real submission, this would be an LLM or Model)
+        # AI Logic
         if "http://" in state['url']:
             action = 7 # mark_harmful
         elif "python" in state['title'].lower():
@@ -21,11 +25,14 @@ def run_agent():
         else:
             action = 3 # movies
 
-        next_state, reward, done, _ = env.step(action)
+        # FIXED: Gymnasium step returns 5 values
+        state, reward, terminated, truncated, info = env.step(action)
+        
+        # Update loop status
+        done = terminated or truncated
         total_score += reward
         
         print(f"Action Taken: {action} | Reward Earned: {reward}")
-        state = next_state
 
     print(f"\n--- Final Score: {total_score} ---")
 
