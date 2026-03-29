@@ -17,4 +17,12 @@
     "description": "Perform classification, safety checks, and generate smart reminders based on usage.",
     "target_reward": 45
   }
+
+  {
+    "task_id": "contest_scheduling",
+    "difficulty": "Hard",
+    "description": "Identify registered coding contests and trigger reminders based on the schedule.",
+    "target_reward": 40
+  }
+
 ]
