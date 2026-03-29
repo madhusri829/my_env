@@ -5,10 +5,10 @@ from env import BrowserOrganizerEnv
 app = FastAPI()
 env = BrowserOrganizerEnv()
 
+# This is what Hugging Face checks to see if you are "Healthy"
 @app.get("/")
 async def health():
-    # This tells Hugging Face "I am alive!"
-    return {"status": "healthy", "message": "Browser Organizer Server is Running"}
+    return {"status": "running", "message": "AI Browser Organizer is Online"}
 
 @app.post("/reset")
 async def reset():
@@ -28,4 +28,4 @@ async def step(data: dict):
     }
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=7860)
